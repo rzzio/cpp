@@ -1,52 +1,87 @@
-#include<SFML\Graphics.hpp>
-#include<iostream>
-#include"animation.h"
+#include <SFML/Graphics.hpp>
+#include"arrow.h"
+#include"enemy.h"
+#include"player.h"
+#include<vector>
+
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1080, 1080), "archer man", sf::Style::Close | sf::Style::Resize);
-	sf::RectangleShape player(sf::Vector2f(200.0f, 300.0f));
-	player.setPosition(100.0f, 775.0f);
-	sf::Texture playertexture;
-	playertexture.loadFromFile("archer.png");
-	player.setTexture(&playertexture);
 
-	animation animation(&playertexture, sf::Vector2u(3, 9), 0.3f);
+	sf::RenderWindow window;
+	sf::Vector2i centerWidow((sf::VideoMode::getDesktopMode().width / 2) - 755, (sf::VideoMode::getDesktopMode().height / 2 - 390));
+	//sf::RenderWindow window(sf::VideoMode(500, 500), "ARCHERMAN");
 
-	float deltatime = 0.0f;
-	sf::Clock clock;
+	window.create(sf::VideoMode(1500, 700), "archerman", sf::Style::Titlebar | sf::Style::Close);
+	window.setPosition(centerWidow);
 
-
-
-
-		
+	window.setKeyRepeatEnabled(true);
+	bool isfiring = false;
 	
+	Player player(sf::Vector2f(50, 50)); //players
+	Enemy enemy(sf::Vector2f(50, 50));
+	
+
+
+	std::vector<Bullet> bullectVec;  //storing bullet
+
+	enemy.setpos(sf::Vector2f(500, 50));
+	player.setPos(sf::Vector2f(550, 200));
+
+
 	while (window.isOpen())
 	{
-		deltatime =clock.restart().asSeconds;
-		sf::Event evnt;
-		while (window.pollEvent(evnt))
+		sf::Event event;
+		while (window.pollEvent(event))
 		{
-			switch (evnt.type)
-			{
-			case sf::Event::Closed:
+			if (event.type == sf::Event::Closed)
 				window.close();
-				break;
-			}
-			//animation.update(0, deltatime);
-			//player.setTextureRect(animation.uvrect);
+			int moveSpeed = 4;
 
-			window.clear();
-			window.draw(player);
-			window.display();
-			getchar();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+				player.move(sf::Vector2f(0, -moveSpeed));
+			}
+			 if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+				 player.move(sf::Vector2f(0, moveSpeed));
+			 }
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+				player.move(sf::Vector2f(-moveSpeed, 0));
+			}
+			 if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) { 
+				player.move(sf::Vector2f(moveSpeed, 0));
+			}
+				
+
+			 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+				 isfiring = true;
+
+			}
+			
+
 
 		}
-		getchar();
-		return 0;
+		if (isfiring == true) {
+			Bullet newbullet(sf::Vector2f(50, 5));
+			newbullet.setpos(sf::Vector2f(player.getX(), player.getY()));
+			bullectVec.push_back(newbullet);
+			isfiring = false;
 
+		}
+		for (int i = 0; i < bullectVec.size(); i++) {
+			bullectVec[i].draw(window);
+			bullectVec[i].fire(3);
+		}
+		for (int i = 0; i < bullectVec.size(); i++) {
+			enemy.checkcoll(bullectVec[i]); 
+		}
+
+		window.clear();
+	
+		player.draw(window);
+ 	
+		enemy.draw(window);
+		window.display();
 	}
 
-
-
+	return 0;
 }
