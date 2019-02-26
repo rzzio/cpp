@@ -9,9 +9,14 @@ int main()
 
 {
 	srand(time(NULL));
-    sf::RenderWindow window;
-    window.create(VideoMode(1920, 1080), "archerman", Style::Titlebar | Style::Close);
+	sf::RenderWindow window;
+	window.create(VideoMode(1000, 800), "archerman", Style::Titlebar | Style::Close);
 	window.setFramerateLimit(60);
+	sf::Texture texture;
+	if (!texture.loadFromFile("backimg.png"))
+		std::cout << "failed load";
+	sf::Sprite bg;
+	bg.setTexture(texture);
 
 
 	Font font;     //making my font 
@@ -78,15 +83,15 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 
-            }
-			
+		}
+
 		//update player
 		if (player.hp > 0)
 		{
 
 
 			//making 1st player move
-			
+
 			if (Keyboard::isKeyPressed(Keyboard::W))
 				player.shape.move(0.f, -10.f);
 
@@ -168,7 +173,7 @@ int main()
 			{
 				shoottimer++;
 			}
-			if (Keyboard::isKeyPressed(Keyboard::Space) && shoottimer >= 40 )
+			if (Keyboard::isKeyPressed(Keyboard::Space) && shoottimer >= 40)
 
 			{
 				player.bullets.push_back(bullet(&bullettex, player.shape.getPosition()));
@@ -199,7 +204,7 @@ int main()
 
 			//____________________________________________________
 
-			
+
 
 			//bullets window collision of player 1
 			for (size_t i = 0; i < player.bullets.size(); i++)
@@ -212,7 +217,7 @@ int main()
 					break;
 				}
 
-				
+
 
 
 				//enemy collision
@@ -318,11 +323,12 @@ int main()
 
 		//draw 
 		window.clear();
+		window.draw(bg);
 
 
 
 
-		window.draw(player.shape);     
+		window.draw(player.shape);
 		window.draw(player2.shape);
 
 
@@ -336,14 +342,14 @@ int main()
 		}
 
 		//bullets of player 2
-		
+
 		for (size_t i = 0; i < player2.bullets.size(); i++)
 		{
 			window.draw(player2.bullets[i].shape);
 		}
 
 		//enemy
-		for (size_t i = 0; i<enemies.size(); i++)
+		for (size_t i = 0; i < enemies.size(); i++)
 		{
 			ehptext.setString(std::to_string(enemies[i].hp) + "/" + std::to_string(enemies[i].hpmax));
 			ehptext.setPosition(enemies[i].shape.getPosition().x, enemies[i].shape.getPosition().y - ehptext.getGlobalBounds().height);
