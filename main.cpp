@@ -17,6 +17,11 @@ int main()
 		std::cout << "failed load";
 	sf::Sprite bg;
 	bg.setTexture(texture);
+	sf::SoundBuffer buffer;
+	buffer.loadFromFile("backmusic.wav");
+	sf::Sound sound;
+	sound.setBuffer(buffer);
+	sound.play();
 
 
 	Font font;     //making my font 
