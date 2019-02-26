@@ -1,8 +1,11 @@
 #pragma once
-#include<SFML\Graphics.hpp>
+#pragma once
+#pragma once
+
 #include <SFML/Graphics.hpp>
 #include"SFML\Window.hpp"
 #include"SFML\System.hpp"
+#include"SFML\Audio.hpp"
 #include<iostream>
 #include<math.h>
 #include<cstdlib>
@@ -21,7 +24,7 @@ public:
 	{
 		this->shape.setTexture(*texture);
 		this->shape.setScale(2.3f, 01.f);
-		
+
 
 		this->shape.setPosition(pos);
 
@@ -55,10 +58,10 @@ public:
 
 		this->shape.setPosition(0.0f, 0.0f);///player posiyion
 		this->shape.setScale(1.0f, 1.f);
-		this->shape.setOrigin(shape.getPosition().x/5,shape.getPosition().y/6);
+		this->shape.setOrigin(shape.getPosition().x / 5, shape.getPosition().y / 6);
 	}
 
-	
+
 
 
 
@@ -84,5 +87,23 @@ public:
 	~enemy() {};
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
