@@ -1,81 +1,8 @@
 #include <SFML/Graphics.hpp>
-#include"SFML\Window.hpp"
-#include"SFML\System.hpp"
-#include<iostream>
-#include<math.h>
-#include<cstdlib>
-#include<vector>
+
+#include"player1.h"
 
 using namespace sf;
-
-class bullet
-{
-public:
-	Sprite shape;
-
-	bullet(Texture *texture, Vector2f pos)
-	{
-		this->shape.setTexture(*texture);
-		this->shape.setScale(0.8f, 0.8f);
-		this->shape.setPosition(pos);
-
-	}
-
-
-};
-
-
-class player
-{
-public:
-	Sprite shape;
-	Texture* texture;
-
-	int hp;
-	int hpmax;
-
-	std::vector<bullet> bullets;
-
-
-	player(Texture *texture)
-	{
-		this->hpmax = 10;
-		this->hp = this->hpmax;
-
-		this->texture = texture;
-		this->shape.setTexture(*texture);
-
-		this->shape.setPosition(0.0f, 0.0f);       ///player posiyion
-
-
-	}
-
-
-
-
-
-};
-
-class enemy
-{
-public:
-	Sprite shape;
-	int hp;
-	int hpmax;
-
-	enemy(Texture *texture, Vector2u windowsize) {
-
-		this->hpmax = rand() % 3 + 1;
-		this->hp = this->hpmax;
-
-		this->shape.setTexture(*texture);
-		this->shape.setPosition(windowsize.x - this->shape.getGlobalBounds().width, rand() % (int)(windowsize.y - this->shape.getGlobalBounds().height));
-	}
-	~enemy() {};
-
-};
-
-
 
 
 int main()
@@ -85,8 +12,8 @@ int main()
 
 	sf::RenderWindow window;
 
-	window.create(VideoMode(1500, 700), "archerman", Style::Titlebar | Style::Close);
-	window.setFramerateLimit(60);
+	window.create(VideoMode(1920, 1080), "archerman", Style::Titlebar | Style::Close);
+	window.setFramerateLimit(45);
 
 	Font font;     //making my font 
 	font.loadFromFile("28 Days Later.ttf");
@@ -124,14 +51,14 @@ int main()
 
 	Text ehptext;
 	ehptext.setFont(font);
-	ehptext.setCharacterSize(12);
+	ehptext.setCharacterSize(20);
 	//ehptext.setColor(Color::White);
 
 	Text gameover;
 	gameover.setFont(font);
-	gameover.setCharacterSize(90);
+	gameover.setCharacterSize(100);
 	gameover.setFillColor(Color::Red);
-	gameover.setPosition(100.f, window.getSize().y/2);
+	gameover.setPosition(100.f, player.shape.getPosition().x/2);
 	gameover.setString("GAME OVER BUDDY");
 
 
@@ -190,7 +117,7 @@ int main()
 			//update comtrol
 
 			// bullets
-			if (shoottimer < 30)
+			if (shoottimer < 40)
 			{
 				shoottimer++;
 			}
@@ -214,7 +141,7 @@ int main()
 			for (size_t i = 0; i < player.bullets.size(); i++)
 			{
 				//move bullets
-				player.bullets[i].shape.move(20.0F, 0.0F);
+				player.bullets[i].shape.move(20.0F, 5.F);
 				if (player.bullets[i].shape.getPosition().x > window.getSize().x)
 				{
 					player.bullets.erase(player.bullets.begin() + i);
@@ -247,11 +174,11 @@ int main()
 
 
 			//enemy update
-			if (enemyspawntimer < 20)   //ENEMY SPAWN
+			if (enemyspawntimer < 50)   //ENEMY SPAWN
 				enemyspawntimer++;
 
 
-			if (enemyspawntimer >= 20)
+			if (enemyspawntimer >= 50)
 			{
 
 				enemies.push_back(enemy(&enemytex, window.getSize()));
@@ -277,7 +204,7 @@ int main()
 
 				}
 			}
-
+			
 			//UI update
 			scoretext.setString("Score=" + std::to_string(score));
 
@@ -311,6 +238,7 @@ int main()
 		//UI
 		window.draw(scoretext);
 		window.draw(hptext);
+		
 
 		if (player.hp <= 0)
 			window.draw(gameover);
