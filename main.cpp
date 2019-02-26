@@ -17,11 +17,6 @@ int main()
 		std::cout << "failed load";
 	sf::Sprite bg;
 	bg.setTexture(texture);
-	sf::SoundBuffer buffer;
-	buffer.loadFromFile("backmusic.wav");
-	sf::Sound sound;
-	sound.setBuffer(buffer);
-	sound.play();
 
 
 	Font font;     //making my font 
@@ -34,6 +29,9 @@ int main()
 
 	Texture enemytex;
 	enemytex.loadFromFile("enemy.png");
+
+	Texture earrow;
+	earrow.loadFromFile("earrow.png");
 
 
 	Texture bullettex;
@@ -182,7 +180,6 @@ int main()
 
 			{
 				player.bullets.push_back(bullet(&bullettex, player.shape.getPosition()));
-				//ayer2.bullets.push_back(bullet(&bullettex, player.shape.getPosition()));
 				shoottimer = 0;
 			}
 			// bullets
@@ -196,9 +193,9 @@ int main()
 			{
 				shoottimer2++;
 			}
-			if (Keyboard::isKeyPressed(Keyboard::Num0) && shoottimer2 >= 40)
+			if (Keyboard::isKeyPressed(Keyboard::RShift) && shoottimer2 >= 40)
 			{
-				player2.bullets.push_back(bullet(&bullettex, player2.shape.getPosition()));
+				player2.bullets.push_back(bullet(&earrow, player2.shape.getPosition()));
 				shoottimer2 = 0;
 			}
 
@@ -221,29 +218,18 @@ int main()
 					player.bullets.erase(player.bullets.begin() + i);
 					break;
 				}
-
-
-
-
-				//enemy collision
-				for (size_t k = 0; k < enemies.size(); k++)
+				if (player.bullets[i].shape.getGlobalBounds().intersects(player2.shape.getGlobalBounds()))
 				{
-
-					if (player.bullets[i].shape.getGlobalBounds().intersects(enemies[k].shape.getGlobalBounds()))
-					{
-						if (enemies[k].hp <= 1)
-						{
-							score += enemies[k].hpmax;
-							enemies.erase(enemies.begin() + k);
-						}
-						else
-							enemies[k].hp--;
-						player.bullets.erase(player.bullets.begin() + i);
-						break;
-
-					}
+					score++;
+					player.bullets.erase(player.bullets.begin() + i);
+					break;
 
 				}
+
+
+
+
+
 			}
 
 			//bullet window colliosn of player 2________________________
@@ -257,28 +243,19 @@ int main()
 					break;
 				}
 
+				if (player2.bullets[i].shape.getGlobalBounds().intersects(player.shape.getGlobalBounds()))
+				{
+					score2++;
+					player2.bullets.erase(player2.bullets.begin() + i);
+					break;
+
+				}
+
 
 
 
 				//enemy collision
-				for (size_t k = 0; k < enemies.size(); k++)
-				{
-
-					if (player2.bullets[i].shape.getGlobalBounds().intersects(enemies[k].shape.getGlobalBounds()))
-					{
-						if (enemies[k].hp <= 1)
-						{
-							score += enemies[k].hpmax;
-							enemies.erase(enemies.begin() + k);
-						}
-						else
-							enemies[k].hp--;
-						player2.bullets.erase(player2.bullets.begin() + i);
-						break;
-
-					}
-
-				}
+				
 			}
 
 			//________________________________________________
@@ -290,7 +267,7 @@ int main()
 				enemyspawntimer++;
 
 
-			if (enemyspawntimer >= 50)
+			if (enemyspawntimer >= 1000)
 			{
 
 				enemies.push_back(enemy(&enemytex, window.getSize()));
