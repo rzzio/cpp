@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+#include <SFML\Graphics.hpp>
 #include<SFML\Audio.hpp>
 
 #include"player1.h"
@@ -22,6 +22,12 @@ int main()
 	sf::Sprite bg;
 	bg.setTexture(texture);
 
+	/*sf::SoundBuffer buffer;
+	buffer.loadFromFile("backmusic.wav");
+	sf::Sound sound;
+	sound.setBuffer(buffer);
+	sound.play(); */
+
 
 
 
@@ -40,7 +46,8 @@ int main()
 
 
 	Texture enemytex;
-	enemytex.loadFromFile("enemy.png");
+	enemytex.loadFromFile("enemy.png"); //-----------------------------------------
+
 
 	Texture earrow;
 	earrow.loadFromFile("earrow.png");
@@ -103,11 +110,14 @@ int main()
 	gameover.setPosition(250.f, 250.f);
 	gameover.setString("GAME OVER BUDDY");
 
-
+	player2.shape.move(1700.f, 500.f);
+	
 
 
 	while (window.isOpen())
 	{
+
+
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -116,6 +126,7 @@ int main()
 				window.close();
 
 		}
+		
 
 		if (score < 10 && score2<10)
 			//update player
@@ -128,14 +139,14 @@ int main()
 				if (Keyboard::isKeyPressed(Keyboard::W))
 					player.shape.move(0.f, -10.f);
 
-				if (Keyboard::isKeyPressed(Keyboard::A))
-					player.shape.move(-10.f, 0.f);
+				//if (Keyboard::isKeyPressed(Keyboard::A))
+					//player.shape.move(-10.f, 0.f);
 
 				if (Keyboard::isKeyPressed(Keyboard::S))
 					player.shape.move(0.f, 10.0f);
 
-				if (Keyboard::isKeyPressed(Keyboard::D))
-					player.shape.move(10.f, 0.f);
+				//if (Keyboard::isKeyPressed(Keyboard::D))
+					//player.shape.move(10.f, 0.f);
 
 				hptext.setPosition(player.shape.getPosition().x, player.shape.getPosition().y - hptext.getGlobalBounds().height);
 				hptext.setString(std::to_string(player.hp) + "/" + std::to_string(player.hpmax));
@@ -145,14 +156,14 @@ int main()
 				if (Keyboard::isKeyPressed(Keyboard::Up))
 					player2.shape.move(0.f, -10.f);
 
-				if (Keyboard::isKeyPressed(Keyboard::Left))
-					player2.shape.move(-10.f, 0.f);
+				//if (Keyboard::isKeyPressed(Keyboard::Left))
+					//player2.shape.move(-10.f, 0.f);
 
 				if (Keyboard::isKeyPressed(Keyboard::Down))
 					player2.shape.move(0.f, 10.0f);
 
-				if (Keyboard::isKeyPressed(Keyboard::Right))
-					player2.shape.move(10.f, 0.f);
+				//if (Keyboard::isKeyPressed(Keyboard::Right))
+					//player2.shape.move(10.f, 0.f);
 
 				hptext.setPosition(player2.shape.getPosition().x, player2.shape.getPosition().y - hptext.getGlobalBounds().height);
 				hptext.setString(std::to_string(player2.hp) + "/" + std::to_string(player2.hpmax));
@@ -242,7 +253,7 @@ int main()
 				for (size_t i = 0; i < player.arrows.size(); i++)
 				{
 					//move arrows
-					player.arrows[i].shape.move(20.0F, 5.F);
+					player.arrows[i].shape.move(20.0F, 1.F);
 					if (player.arrows[i].shape.getPosition().x > window.getSize().x)
 					{
 						player.arrows.erase(player.arrows.begin() + i);
@@ -267,7 +278,7 @@ int main()
 				for (size_t i = 0; i < player2.arrows.size(); i++)
 				{
 					//move arrows
-					player2.arrows[i].shape.move(-20.0F, -5.F);
+					player2.arrows[i].shape.move(-20.0F, 1.F);
 					if (player2.arrows[i].shape.getPosition().x > window.getSize().x)
 					{
 						player2.arrows.erase(player2.arrows.begin() + i);
@@ -290,21 +301,7 @@ int main()
 
 				}
 
-				//________________________________________________
-
-
-
-				//enemy update
-				if (enemyspawntimer < 50)   //ENEMY SPAWN
-					enemyspawntimer++;
-
-
-				if (enemyspawntimer >= 1000)
-				{
-
-					enemies.push_back(enemy(&enemytex, window.getSize()));
-					enemyspawntimer = 0;
-				}
+				//__
 
 
 
@@ -387,11 +384,15 @@ int main()
 
 
 
+
 			if (score >= 10 || score2 >= 10)
 			{
 				window.draw(gameover);
 				window.draw(winner);
+
+
 			}
+			
 
 			window.display();
 

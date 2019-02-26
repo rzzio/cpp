@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include"SFML\Window.hpp"
 #include"SFML\System.hpp"
+#include"SFML\Audio.hpp"
 #include<iostream>
 #include<math.h>
 #include<cstdlib>
@@ -26,7 +27,7 @@ public:
 
 		this->shape.setPosition(pos);
 
-		this->shape.setRotation(8.f);
+		this->shape.setRotation(03.f);
 
 	}
 
