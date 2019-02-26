@@ -20,7 +20,7 @@ public:
 	bullet(Texture *texture, Vector2f(pos))
 	{
 		this->shape.setTexture(*texture);
-		this->shape.setScale(1.3f, 0.8f);
+		this->shape.setScale(2.3f, 01.f);
 		
 
 		this->shape.setPosition(pos);
@@ -79,6 +79,10 @@ public:
 		this->shape.setTexture(*texture);
 		this->shape.setPosition(windowsize.x - this->shape.getGlobalBounds().width, rand() % (int)(windowsize.y - this->shape.getGlobalBounds().height));
 	}
+
+
 	~enemy() {};
 
 };
+
+

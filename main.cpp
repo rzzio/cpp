@@ -9,11 +9,10 @@ int main()
 
 {
 	srand(time(NULL));
+    sf::RenderWindow window;
+    window.create(VideoMode(1920, 1080), "archerman", Style::Titlebar | Style::Close);
+	window.setFramerateLimit(60);
 
-	sf::RenderWindow window;
-
-	window.create(VideoMode(1920, 1080), "archerman", Style::Titlebar | Style::Close);
-	window.setFramerateLimit(45);
 
 	Font font;     //making my font 
 	font.loadFromFile("28 Days Later.ttf");
@@ -22,11 +21,18 @@ int main()
 	Texture playertex;
 	playertex.loadFromFile("archer.png");
 
+
 	Texture enemytex;
 	enemytex.loadFromFile("enemy.png");
 
+
 	Texture bullettex;
 	bullettex.loadFromFile("arrow.png");
+
+	player player2(&enemytex); //making 2nd player
+	int score2 = 0;
+	int shoottimer2 = 50;
+
 
 	//displaying scoretext
 	Text scoretext;
@@ -36,9 +42,9 @@ int main()
 	scoretext.setPosition(10.f, 10.f);
 
 	//player init
-	int score = 0;
+	int score = 0;                            //making 1st player
 	player player(&playertex);
-	int shoottimer = 25;
+	int shoottimer = 40;
 
 	Text hptext;
 	hptext.setFont(font);
@@ -58,7 +64,7 @@ int main()
 	gameover.setFont(font);
 	gameover.setCharacterSize(100);
 	gameover.setFillColor(Color::Red);
-	gameover.setPosition(100.f, player.shape.getPosition().x/2);
+	gameover.setPosition(100.f, player.shape.getPosition().x / 2);
 	gameover.setString("GAME OVER BUDDY");
 
 
@@ -72,18 +78,15 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 
-
-
-
-		}
-
+            }
+			
 		//update player
 		if (player.hp > 0)
 		{
 
 
-
-
+			//making 1st player move
+			
 			if (Keyboard::isKeyPressed(Keyboard::W))
 				player.shape.move(0.f, -10.f);
 
@@ -99,8 +102,29 @@ int main()
 			hptext.setPosition(player.shape.getPosition().x, player.shape.getPosition().y - hptext.getGlobalBounds().height);
 			hptext.setString(std::to_string(player.hp) + "/" + std::to_string(player.hpmax));
 
+			//making 2nd player move___________________________________________________________________
 
-			//collison with window
+			if (Keyboard::isKeyPressed(Keyboard::Up))
+				player2.shape.move(0.f, -10.f);
+
+			if (Keyboard::isKeyPressed(Keyboard::Left))
+				player2.shape.move(-10.f, 0.f);
+
+			if (Keyboard::isKeyPressed(Keyboard::Down))
+				player2.shape.move(0.f, 10.0f);
+
+			if (Keyboard::isKeyPressed(Keyboard::Right))
+				player2.shape.move(10.f, 0.f);
+
+			hptext.setPosition(player2.shape.getPosition().x, player2.shape.getPosition().y - hptext.getGlobalBounds().height);
+			hptext.setString(std::to_string(player2.hp) + "/" + std::to_string(player2.hpmax));
+
+
+
+			//_____________________________________________________________________________________________
+
+
+			//collison with window of player1
 
 			if (player.shape.getPosition().x <= 0) //left 
 				player.shape.setPosition(0.f, player.shape.getPosition().y);
@@ -114,30 +138,70 @@ int main()
 
 
 
+			//collison with window of player 2_______________________________
+
+			if (player2.shape.getPosition().x <= 0) //left 
+				player2.shape.setPosition(0.f, player2.shape.getPosition().y);
+			if (player2.shape.getPosition().x >= window.getSize().x - player2.shape.getGlobalBounds().width) //right
+				player2.shape.setPosition(window.getSize().x - player2.shape.getGlobalBounds().width, player2.shape.getPosition().y);
+			if (player2.shape.getPosition().y <= 0) //top
+				player2.shape.setPosition(player2.shape.getPosition().x, 0.0f);
+			if (player2.shape.getPosition().y >= window.getSize().y - player2.shape.getGlobalBounds().height) //bottom
+				player2.shape.setPosition(player2.shape.getPosition().x, window.getSize().y - player2.shape.getGlobalBounds().height);
+
+
+
+			//______________________________________________________________
+
+
+
+
+
+
+
+
+
 			//update comtrol
 
-			// bullets
+			// bullets of player 1
 			if (shoottimer < 40)
 			{
 				shoottimer++;
 			}
-			if (Keyboard::isKeyPressed(Keyboard::Space) && shoottimer >= 30)
+			if (Keyboard::isKeyPressed(Keyboard::Space) && shoottimer >= 40 )
+
 			{
 				player.bullets.push_back(bullet(&bullettex, player.shape.getPosition()));
+				//ayer2.bullets.push_back(bullet(&bullettex, player.shape.getPosition()));
 				shoottimer = 0;
 			}
-
-
 			// bullets
 
 
 
-			if (shoottimer < 15)
+			//______________________________________________________ bullets of player 2
+
+
+			if (shoottimer2 < 40)
 			{
-				shoottimer++;
+				shoottimer2++;
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Num0) && shoottimer2 >= 40)
+			{
+				player2.bullets.push_back(bullet(&bullettex, player2.shape.getPosition()));
+				shoottimer2 = 0;
 			}
 
-			//bullets window collision
+			if (shoottimer2 < 15)
+			{
+				shoottimer2++;
+			}
+
+			//____________________________________________________
+
+			
+
+			//bullets window collision of player 1
 			for (size_t i = 0; i < player.bullets.size(); i++)
 			{
 				//move bullets
@@ -148,6 +212,7 @@ int main()
 					break;
 				}
 
+				
 
 
 				//enemy collision
@@ -170,6 +235,43 @@ int main()
 
 				}
 			}
+
+			//bullet window colliosn of player 2________________________
+			for (size_t i = 0; i < player2.bullets.size(); i++)
+			{
+				//move bullets
+				player2.bullets[i].shape.move(-20.0F, -5.F);
+				if (player2.bullets[i].shape.getPosition().x > window.getSize().x)
+				{
+					player2.bullets.erase(player2.bullets.begin() + i);
+					break;
+				}
+
+
+
+
+				//enemy collision
+				for (size_t k = 0; k < enemies.size(); k++)
+				{
+
+					if (player2.bullets[i].shape.getGlobalBounds().intersects(enemies[k].shape.getGlobalBounds()))
+					{
+						if (enemies[k].hp <= 1)
+						{
+							score += enemies[k].hpmax;
+							enemies.erase(enemies.begin() + k);
+						}
+						else
+							enemies[k].hp--;
+						player2.bullets.erase(player2.bullets.begin() + i);
+						break;
+
+					}
+
+				}
+			}
+
+			//________________________________________________
 
 
 
@@ -204,7 +306,7 @@ int main()
 
 				}
 			}
-			
+
 			//UI update
 			scoretext.setString("Score=" + std::to_string(score));
 
@@ -217,28 +319,42 @@ int main()
 		//draw 
 		window.clear();
 
-		
-		window.draw(player.shape);
+
+
+
+		window.draw(player.shape);     
+		window.draw(player2.shape);
+
+
+
 
 		//bullets
 		for (size_t i = 0; i < player.bullets.size(); i++)
 		{
 			window.draw(player.bullets[i].shape);
+
+		}
+
+		//bullets of player 2
+		
+		for (size_t i = 0; i < player2.bullets.size(); i++)
+		{
+			window.draw(player2.bullets[i].shape);
 		}
 
 		//enemy
 		for (size_t i = 0; i<enemies.size(); i++)
 		{
 			ehptext.setString(std::to_string(enemies[i].hp) + "/" + std::to_string(enemies[i].hpmax));
-			ehptext.setPosition(enemies[i].shape.getPosition().x, enemies[i].shape.getPosition().y-ehptext.getGlobalBounds().height);
-			window.draw(ehptext);
+			ehptext.setPosition(enemies[i].shape.getPosition().x, enemies[i].shape.getPosition().y - ehptext.getGlobalBounds().height);
+			//window.draw(ehptext);
 			window.draw(enemies[i].shape);
 		}
 
 		//UI
 		window.draw(scoretext);
 		window.draw(hptext);
-		
+
 
 		if (player.hp <= 0)
 			window.draw(gameover);
