@@ -43,17 +43,14 @@ public:
 
 	Texture* texture;
 
-	int hp;
-	int hpmax;
+	
 
 	std::vector<arrow> arrows;
 
 
 	player(Texture *texture)
 	{
-		this->hpmax = 10;
-		this->hp = this->hpmax;
-		//this->shape.setTextureRect(sf::IntRect(190, 150, 150, 150));
+		
 
 		this->texture = texture;
 		this->shape.setTexture(*texture);
@@ -74,8 +71,7 @@ class enemy
 {
 public:
 	Sprite shape;
-	int hp;
-	int hpmax;
+	
 
 	enemy(Texture *texture, Vector2u windowsize) {
 
