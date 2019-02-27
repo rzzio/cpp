@@ -9,18 +9,21 @@
 #include "maingame.h"
 #include "Menu.h"
 #include "files.h"
+
+
 using namespace std;
 using namespace sf;
 int main()
 {
 	string ch;
-	bool b=true;
+	bool b = false;
 	Readfile rd;
 	menu m;
 	mainGame mm;
 
 	do
 	{
+		
 		int n = m.showoptions();
 		switch (n)
 		{
@@ -36,7 +39,7 @@ int main()
 			rd.read(ch, "Help");
 			break;
 		default:
-			b = false;
+			b = true;
 			break;
 		}
 	} while (b);
