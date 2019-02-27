@@ -21,7 +21,7 @@ public:
 
 	arrow(Texture *texture, Vector2f(pos))
 	{
-		
+
 		this->shape.setTexture(*texture);
 		this->shape.setScale(1.f, 01.f);
 
@@ -54,7 +54,7 @@ public:
 		this->hpmax = 10;
 		this->hp = this->hpmax;
 		//this->shape.setTextureRect(sf::IntRect(190, 150, 150, 150));
-		
+
 		this->texture = texture;
 		this->shape.setTexture(*texture);
 
@@ -88,6 +88,3 @@ public:
 	~enemy() {};
 
 };
-
-
-

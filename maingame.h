@@ -20,11 +20,11 @@ public:
 		sf::Sprite bg;
 		bg.setTexture(texture);
 
-		/*sf::SoundBuffer bgmusic;
-		bgmusic.loadFromFile("backmusic.wav");
-		sf::Sound sound3;
-		sound3.setBuffer(bgmusic);
-		sound3.play();  */
+		sf::Music sound3;
+		sound3.openFromFile("11.wav");
+		sound3.setVolume(10.f);
+		sound3.play();  
+		
 
 		
 
@@ -56,7 +56,7 @@ public:
 
 		//init textures
 		Texture playertex;
-		playertex.loadFromFile("archer.png");
+		playertex.loadFromFile("archer2.png");
 
 
 		Texture enemytex;
@@ -69,6 +69,14 @@ public:
 
 		Texture arrowtex;
 		arrowtex.loadFromFile("arrow.png");
+
+		Texture dietex;
+		dietex.loadFromFile("die.png");
+
+
+
+
+		
 
 		player player2(&enemytex); //making 2nd player
 		int score2 = 0;
@@ -125,7 +133,7 @@ public:
 		gameover.setPosition(250.f, 250.f);
 		gameover.setString("GAME OVER BUDDY");
 
-		player2.shape.move(1800.f, 400.f);
+		player2.shape.move(1800.f, 350.f);
 
 
 
@@ -174,7 +182,7 @@ public:
 					if (Keyboard::isKeyPressed(Keyboard::Up))
 						player2.shape.move(0.f, -10.f);
 
-					//if (Keyboard::isKeyPressed(Keyboard::Left))
+					//if (Keyboard::isKeyPressed(Keyboard::Left))      //extra movement if needed
 					//player2.shape.move(-10.f, 0.f);
 
 					if (Keyboard::isKeyPressed(Keyboard::Down))
@@ -409,7 +417,8 @@ public:
 				{
 					window.draw(gameover);
 					window.draw(winner);
-					sound2.play();
+					sound3.pause();     //stopping bg sound
+					sound2.play();    //gameover sound
 
 
 				}

@@ -80,7 +80,7 @@ public:
 						window.draw(text4);
 						window.display();
 						sleep(seconds(1));
-						text1.setFillColor(Color::Green);
+						text1.setFillColor(Color::Red);
 						window.clear();
 						window.draw(sprite);
 						window.draw(text1);
