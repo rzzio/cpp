@@ -1,4 +1,5 @@
 #include<SFML\Audio.hpp>
+#include"deadman.h"
 
 using namespace std;
 using namespace sf;
@@ -8,8 +9,8 @@ class mainGame
 public:
 	bool start()
 	{
-		
-		
+
+
 		srand(time(NULL));
 		sf::RenderWindow window;
 		window.create(VideoMode(1920, 1080), "archerman", Style::Titlebar | Style::Close);
@@ -23,10 +24,10 @@ public:
 		sf::Music sound3;
 		sound3.openFromFile("11.wav");
 		sound3.setVolume(10.f);
-		sound3.play();  
-		
+		sound3.play();
 
-		
+
+
 
 
 		sf::SoundBuffer shoot;
@@ -38,13 +39,6 @@ public:
 		gameovers.loadFromFile("over.wav");      //game over sound
 		sf::Sound sound2;
 		sound2.setBuffer(gameovers);
-
-		
-		  
-		
-
-
-
 
 
 
@@ -70,13 +64,24 @@ public:
 		Texture arrowtex;
 		arrowtex.loadFromFile("arrow.png");
 
+		Texture deadtex;
+		deadtex.loadFromFile("deadman.png");
+
+		Texture injured1tex;
+		injured1tex.loadFromFile("injured1.png");
+
+		Texture injured2tex;
+		injured2tex.loadFromFile("injured2.png");
+
+
+
 		Texture dietex;
 		dietex.loadFromFile("die.png");
 
 
 
 
-		
+
 
 		player player2(&enemytex); //making 2nd player
 		int score2 = 0;
@@ -110,28 +115,27 @@ public:
 		int score = 0;                            //making 1st player
 		player player(&playertex);
 
+
+
+
+
 		int shoottimer = 40;
 
-		Text hptext;
-		hptext.setFont(font);
-		hptext.setCharacterSize(12);
-		//hptext.setColor(Color::White);
+
 
 		//init enimies
 
 		std::vector<enemy> enemies;
 
-		Text ehptext;
-		ehptext.setFont(font);
-		ehptext.setCharacterSize(20);
-		//ehptext.setColor(Color::White);
 
 		Text gameover;
 		gameover.setFont(font);
 		gameover.setCharacterSize(200);
 		gameover.setFillColor(Color::Black);
 		gameover.setPosition(250.f, 250.f);
-		gameover.setString("GAME OVER BUDDY");
+		gameover.setString("GAME   OVER");
+
+
 
 		player2.shape.move(1800.f, 350.f);
 
@@ -139,7 +143,7 @@ public:
 
 		while (window.isOpen())
 		{
-			
+
 
 
 
@@ -155,8 +159,10 @@ public:
 			if (score < 10 && score2<10)
 				//update player
 			{
-				
+
 				{
+					deadman injured1(&injured1tex, player.shape.getPosition().x, player.shape.getPosition().y);
+					deadman injured2(&injured2tex, player2.shape.getPosition().x, player2.shape.getPosition().y);
 
 
 
@@ -174,8 +180,8 @@ public:
 					//if (Keyboard::isKeyPressed(Keyboard::D))
 					//player.shape.move(10.f, 0.f);
 
-					hptext.setPosition(player.shape.getPosition().x, player.shape.getPosition().y - hptext.getGlobalBounds().height);
-					hptext.setString(std::to_string(player.hp) + "/" + std::to_string(player.hpmax));
+
+
 
 					//making 2nd player move___________________________________________________________________
 
@@ -191,8 +197,6 @@ public:
 					//if (Keyboard::isKeyPressed(Keyboard::Right))
 					//player2.shape.move(10.f, 0.f);
 
-					hptext.setPosition(player2.shape.getPosition().x, player2.shape.getPosition().y - hptext.getGlobalBounds().height);
-					hptext.setString(std::to_string(player2.hp) + "/" + std::to_string(player2.hpmax));
 
 
 
@@ -288,12 +292,26 @@ public:
 						if (player.arrows[i].shape.getGlobalBounds().intersects(player2.shape.getGlobalBounds()))
 						{
 							score++;
-							sound.play(); 
+
+							//player2.shape.setColor(Color::Transparent);
+
+							
+							
+
+							player2.shape.setScale(player2.shape.getScale().x-.05f,player2.shape.getScale().y-.05f);   //twisterrrrrrrrrrrrrrr
+
+							
+					         
+
+
+							sound.play();
 
 							player.arrows.erase(player.arrows.begin() + i);
+
 							break;
 
 						}
+						
 
 
 
@@ -318,7 +336,12 @@ public:
 							sound.play();
 
 							player2.arrows.erase(player2.arrows.begin() + i);
+
+
+
+							
 							break;
+
 
 						}
 
@@ -345,7 +368,7 @@ public:
 						if (enemies[i].shape.getGlobalBounds().intersects(player.shape.getGlobalBounds()))
 						{
 							enemies.erase(enemies.begin() + i);
-							player.hp--; //player health decreasing
+
 							break;
 
 						}
@@ -369,8 +392,18 @@ public:
 
 
 
-				window.draw(player.shape);
-				window.draw(player2.shape);
+				/*	if (score > 9)
+				{
+				player2.shape.setColor(Color::Transparent);
+
+				}
+
+				if (score2 < 9)
+				player.shape.setColor(Color::Transparent); */
+
+
+
+
 
 
 
@@ -379,6 +412,8 @@ public:
 				for (size_t i = 0; i < player.arrows.size(); i++)
 				{
 					window.draw(player.arrows[i].shape);
+
+
 
 				}
 
@@ -394,20 +429,38 @@ public:
 				window.draw(scoretext);
 				window.draw(scoretext2);
 
+				deadman deadman2(&deadtex, player2.shape.getPosition().x - 90, player2.shape.getPosition().y);
+				deadman deadman1(&deadtex, player.shape.getPosition().x, player.shape.getPosition().y);
+
+
+
 
 				//winner printing
 
-				if (score >= 9)
+				if (score >= 10)
 				{
 					winner.setFillColor(Color::Red);
 
 					winner.setString("PLAYER1 WINS");
+
+					player2.shape.setColor(Color::Transparent);
+
+
+					window.draw(deadman2.shapedead);
+
 				}
 				if (score2 >= 10)
 				{
 					winner.setFillColor(Color::Green);
 					winner.setString("PLAYER2 WINS");
+					player.shape.setColor(Color::Transparent);
+					window.draw(deadman1.shapedead);
+
 				}
+				window.draw(player.shape);
+				window.draw(player2.shape);
+
+
 
 
 
@@ -415,8 +468,12 @@ public:
 
 				if (score >= 10 || score2 >= 10)
 				{
+
+
+
 					window.draw(gameover);
 					window.draw(winner);
+
 					sound3.pause();     //stopping bg sound
 					sound2.play();    //gameover sound
 
@@ -433,9 +490,9 @@ public:
 
 		return 0;
 
-		}
-	
-	};
+	}
+
+};
 
 
 
