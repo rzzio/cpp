@@ -84,7 +84,7 @@ public:
 
 
 		player player2(&enemytex); //making 2nd player
-		int score2 = 0;
+		int score2 = 100;
 		int shoottimer2 = 50;
 
 
@@ -100,7 +100,7 @@ public:
 		scoretext2.setFont(font);                  //score of player 2
 		scoretext2.setCharacterSize(80);
 		scoretext2.setFillColor(Color::Green);
-		scoretext2.setPosition(1600.f, 10.f);
+		scoretext2.setPosition(1500.f, 10.f);
 
 
 		Text winner;
@@ -112,14 +112,14 @@ public:
 
 
 		//player init
-		int score = 0;                            //making 1st player
+		int score = 100;                            //making 1st player
 		player player(&playertex);
 
 
 
 
 
-		int shoottimer = 40;
+		int shoottimer = 50;
 
 
 
@@ -156,7 +156,7 @@ public:
 			}
 
 
-			if (score < 10 && score2<10)
+			if (score > 5 && score2>5)
 				//update player
 			{
 
@@ -291,17 +291,17 @@ public:
 						}
 						if (player.arrows[i].shape.getGlobalBounds().intersects(player2.shape.getGlobalBounds()))
 						{
-							score++;
+							score2 = score2 - 10;
 
 							//player2.shape.setColor(Color::Transparent);
 
-							
-							
 
-							player2.shape.setScale(player2.shape.getScale().x-.05f,player2.shape.getScale().y-.05f);   //twisterrrrrrrrrrrrrrr
 
-							
-					         
+
+							player2.shape.setScale(player2.shape.getScale().x - .05f, player2.shape.getScale().y - .05f);   //twisterrrrrrrrrrrrrrr
+
+
+
 
 
 							sound.play();
@@ -311,7 +311,7 @@ public:
 							break;
 
 						}
-						
+
 
 
 
@@ -332,14 +332,16 @@ public:
 
 						if (player2.arrows[i].shape.getGlobalBounds().intersects(player.shape.getGlobalBounds()))
 						{
-							score2++;
+							score = score - 10;
 							sound.play();
+							player.shape.setScale(player.shape.getScale().x - .05f, player.shape.getScale().y - .05f);   //twisterrrrrrrrrrrrrrr
+
 
 							player2.arrows.erase(player2.arrows.begin() + i);
 
 
 
-							
+
 							break;
 
 
@@ -348,7 +350,7 @@ public:
 
 
 
-						//enemy collision
+						//enemy collis
 
 					}
 
@@ -375,8 +377,8 @@ public:
 					}
 
 					//UI update
-					scoretext.setString("Score  " + std::to_string(score));
-					scoretext2.setString("Score  " + std::to_string(score2));
+					scoretext.setString("HEALTH  " + std::to_string(score));
+					scoretext2.setString("HEALTH  " + std::to_string(score2));
 
 				}
 
@@ -391,15 +393,6 @@ public:
 
 
 
-
-				/*	if (score > 9)
-				{
-				player2.shape.setColor(Color::Transparent);
-
-				}
-
-				if (score2 < 9)
-				player.shape.setColor(Color::Transparent); */
 
 
 
@@ -437,7 +430,7 @@ public:
 
 				//winner printing
 
-				if (score >= 10)
+				if (score2 < 10)
 				{
 					winner.setFillColor(Color::Red);
 
@@ -449,7 +442,7 @@ public:
 					window.draw(deadman2.shapedead);
 
 				}
-				if (score2 >= 10)
+				if (score < 10)
 				{
 					winner.setFillColor(Color::Green);
 					winner.setString("PLAYER2 WINS");
@@ -466,7 +459,7 @@ public:
 
 
 
-				if (score >= 10 || score2 >= 10)
+				if (score < 10 || score2 < 10)
 				{
 
 

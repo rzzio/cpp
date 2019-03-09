@@ -19,7 +19,7 @@ public:
 		file.open(filename, ios::in);
 		file.get(expression, 400, '$');
 		file.close();
-		window.create(VideoMode(726, 600), b);
+		window.create(VideoMode(726, 850), b);
 		window.setPosition(Vector2i(300, 0));
 		texture.loadFromFile("back1.jpg");
 		sprite.setTexture(texture);

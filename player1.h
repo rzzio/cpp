@@ -43,14 +43,14 @@ public:
 
 	Texture* texture;
 
-	
+
 
 	std::vector<arrow> arrows;
 
 
 	player(Texture *texture)
 	{
-		
+
 
 		this->texture = texture;
 		this->shape.setTexture(*texture);
@@ -71,7 +71,7 @@ class enemy
 {
 public:
 	Sprite shape;
-	
+
 
 	enemy(Texture *texture, Vector2u windowsize) {
 

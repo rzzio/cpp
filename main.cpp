@@ -39,7 +39,7 @@ int main()
 			rd.read(ch, "Help");
 			break;
 		default:
-			b = true;
+			b = false;
 			break;
 		}
 	} while (b);

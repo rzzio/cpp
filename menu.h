@@ -13,7 +13,7 @@ private:
 public:
 	int showoptions()
 	{
-		window.create(sf::VideoMode(1400, 700), "Archerman");
+		window.create(sf::VideoMode(1000, 600), "Archerman");
 		window.setPosition(Vector2i(200, 100));
 		buffer.loadFromFile("keypress.wav");
 		sound.setBuffer(buffer);

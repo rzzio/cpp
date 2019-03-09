@@ -1,0 +1,17 @@
+Player1 controls:
+
+Move:
+     S
+     w
+shoot:
+     space
+
+Player2 controls:
+
+Move:
+     keyUP
+     keyDOWN
+shoot:
+     Num pad 0
+
+player scoring 10 wins.

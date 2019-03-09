@@ -1,0 +1,8 @@
+This game is collectively designed
+ by suraj,saurav and umesh as a 
+project of object oriented
+ programming. This game provides 
+full entertainment to a person
+ whoever plays
+this.
+
